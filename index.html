@@ -246,10 +246,37 @@
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
     }
-    .legend-title { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
-    .legend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
-    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text-secondary); }
-    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-title { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+    /* 12 columns on wide screens, fewer on small */
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 900px) { .legend-grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 600px) { .legend-grid { grid-template-columns: repeat(3, 1fr); } }
+    .legend-group {
+      background: var(--bg-card2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    .legend-group-label {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em;
+      margin-bottom: 8px; text-transform: uppercase;
+    }
+    .legend-team {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; color: var(--text-secondary); line-height: 1.8;
+    }
+    .legend-team img.emoji { width: 16px; height: 16px; vertical-align: middle; }
+    .legend-team span.flag-emoji { font-size: 0.9rem; line-height: 1; }
+
+    /* ── Emoji image sizing (Twemoji) ── */
+    /* Team flags in match rows */
+    .team-flag img.emoji { width: 2rem; height: 2rem; vertical-align: middle; }
+    /* Small emoji in buttons / labels */
+    .filter-btn img.emoji, .hero-badge img.emoji, .phase-title img.emoji { width: 1em; height: 1em; vertical-align: -0.15em; }
+    /* Venue flag prefix */
+    .match-venue img.emoji { width: 0.9em; height: 0.9em; vertical-align: middle; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
@@ -902,6 +929,12 @@ function renderAll() {
     `;
     calendar.appendChild(card);
   });
+
+  // Twemoji: 重新轉換動態新增的 DOM emoji
+  if (typeof twemoji !== 'undefined') {
+    twemoji.parse(calendar, { folder: 'svg', ext: '.svg' });
+    twemoji.parse(legendGrid, { folder: 'svg', ext: '.svg' });
+  }
 }
 
 function filterGroup(g) {
@@ -970,11 +1003,15 @@ renderAll();
 <!-- Twemoji：修正 Windows 國旗 emoji 顯示問題 -->
 <script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <script>
-  twemoji.parse(document.body, {
-    folder: 'svg',
-    ext: '.svg',
-    base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/'
-  });
+  // 定義全局 twemoji 轉換僕道（不包含 filter 區域）
+  function applyTwemoji(el) {
+    if (!el || typeof twemoji === 'undefined') return;
+    twemoji.parse(el, { folder: 'svg', ext: '.svg' });
+  }
+  // 初始化：轉換 filter 區、hero 等靜態內容
+  applyTwemoji(document.querySelector('.filter-section'));
+  applyTwemoji(document.querySelector('.hero'));
+  // renderAll 已內建 twemoji.parse(calendar)，不需要再次處理
 </script>
 </body>
 </html>
