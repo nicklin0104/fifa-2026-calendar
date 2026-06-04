@@ -966,5 +966,15 @@ function closeFilterPanel() {
 updateFilterSummary();
 renderAll();
 </script>
+
+<!-- Twemoji：修正 Windows 國旗 emoji 顯示問題 -->
+<script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script>
+  twemoji.parse(document.body, {
+    folder: 'svg',
+    ext: '.svg',
+    base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/'
+  });
+</script>
 </body>
 </html>
