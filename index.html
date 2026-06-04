@@ -275,6 +275,8 @@
     .team-flag img.emoji { width: 2rem; height: 2rem; vertical-align: middle; }
     /* Small emoji in buttons / labels */
     .filter-btn img.emoji, .hero-badge img.emoji, .phase-title img.emoji { width: 1em; height: 1em; vertical-align: -0.15em; }
+    /* Mobile toggle button emoji */
+    .filter-toggle-btn img.emoji { width: 1.2em; height: 1.2em; vertical-align: -0.15em; }
     /* Venue flag prefix */
     .match-venue img.emoji { width: 0.9em; height: 0.9em; vertical-align: middle; }
 
@@ -743,11 +745,13 @@ const sortedKoDays = Object.keys(koDayMap).sort();
 // ─── Legend ──────────────────────────────────────────────────────────────────
 const legendGrid = document.getElementById('legendGrid');
 Object.entries(GROUP_TEAMS).forEach(([g, teams]) => {
-  const item = document.createElement('div');
-  item.className = 'legend-item';
-  item.innerHTML = `<div class="legend-dot" style="background:${GROUP_COLOR_MAP[g]}"></div>
-    <span><strong style="color:${GROUP_COLOR_MAP[g]}">${g}組</strong>　${teams.map(t=>(FLAGS[t]||'🏴')+t).join('、')}</span>`;
-  legendGrid.appendChild(item);
+  const card = document.createElement('div');
+  card.className = 'legend-group';
+  card.innerHTML = `
+    <div class="legend-group-label" style="color:${GROUP_COLOR_MAP[g]}">${g} 組</div>
+    ${teams.map(t => `<div class="legend-team"><span class="flag-emoji">${FLAGS[t]||'🏴'}</span>${t}</div>`).join('')}
+  `;
+  legendGrid.appendChild(card);
 });
 
 // ─── Render ──────────────────────────────────────────────────────────────────
@@ -932,8 +936,8 @@ function renderAll() {
 
   // Twemoji: 重新轉換動態新增的 DOM emoji
   if (typeof twemoji !== 'undefined') {
-    twemoji.parse(calendar, { folder: 'svg', ext: '.svg' });
-    twemoji.parse(legendGrid, { folder: 'svg', ext: '.svg' });
+    twemoji.parse(calendar, { folder: 'svg', ext: '.svg', base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/' });
+    twemoji.parse(legendGrid, { folder: 'svg', ext: '.svg', base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/' });
   }
 }
 
@@ -1006,7 +1010,7 @@ renderAll();
   // 定義全局 twemoji 轉換僕道（不包含 filter 區域）
   function applyTwemoji(el) {
     if (!el || typeof twemoji === 'undefined') return;
-    twemoji.parse(el, { folder: 'svg', ext: '.svg' });
+    twemoji.parse(el, { folder: 'svg', ext: '.svg', base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/' });
   }
   // 初始化：轉換 filter 區、hero 等靜態內容
   applyTwemoji(document.querySelector('.filter-section'));
