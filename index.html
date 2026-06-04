@@ -366,6 +366,9 @@
   <div class="calendar" id="calendar"></div>
 </div>
 
+<!-- Twemoji：修正 Windows 國旗 emoji 顯示問題 -->
+<script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+
 <script>
 // ─── Flags & Names ────────────────────────────────────────────────────────────
 const FLAGS = {
@@ -1004,8 +1007,6 @@ updateFilterSummary();
 renderAll();
 </script>
 
-<!-- Twemoji：修正 Windows 國旗 emoji 顯示問題 -->
-<script src="https://unpkg.com/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <script>
   // 定義全局 twemoji 轉換僕道（不包含 filter 區域）
   function applyTwemoji(el) {
