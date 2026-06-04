@@ -3,24 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2026 FIFA World Cup｜小組賽完整行事曆</title>
-  <meta name="description" content="2026世界盃足球賽小組賽完整賽程行事曆，包含比賽時間、對陣國家與國旗（台灣時間）" />
+  <title>2026 FIFA World Cup｜完整賽程行事曆</title>
+  <meta name="description" content="2026世界盃足球賽完整賽程行事曆，含小組賽、32強、16強、8強、4強、季軍賽、決賽（台灣時間）" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --gold: #f5c842;
-      --gold-light: #ffe07a;
       --green: #00c86f;
-      --green-dark: #009952;
       --bg-dark: #0a0e1a;
       --bg-card: #111827;
       --bg-card2: #1a2235;
       --border: rgba(255,255,255,0.08);
       --text-primary: #f0f4ff;
       --text-secondary: #8b9bb4;
-      --group-colors: #e74c3c, #e67e22, #f1c40f, #2ecc71, #1abc9c, #3498db, #9b59b6, #e91e63, #ff5722, #607d8b, #795548, #00bcd4;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,270 +29,154 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
-    /* ── Background ── */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background:
         radial-gradient(ellipse 80% 60% at 20% -10%, rgba(0,200,111,0.12) 0%, transparent 60%),
         radial-gradient(ellipse 60% 50% at 80% 110%, rgba(245,200,66,0.10) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
     .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-    /* ── Hero Header ── */
-    .hero {
-      text-align: center;
-      padding: 60px 24px 48px;
-      position: relative;
-    }
+    /* ── Hero ── */
+    .hero { text-align: center; padding: 60px 24px 48px; }
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(245,200,66,0.15);
-      border: 1px solid rgba(245,200,66,0.4);
-      border-radius: 999px;
-      padding: 6px 18px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.4);
+      border-radius: 999px; padding: 6px 18px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 20px;
     }
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.6rem);
-      font-weight: 900;
-      line-height: 1.1;
+      font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.1;
       background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, var(--green) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       margin-bottom: 12px;
     }
-    .hero-sub {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      font-weight: 400;
-      margin-bottom: 32px;
-    }
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-    .stat {
-      text-align: center;
-    }
-    .stat-num {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--gold);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+    .hero-sub { font-size: 1rem; color: var(--text-secondary); margin-bottom: 32px; }
+    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
 
-    /* ── Filter Tabs ── */
+    /* ── Filters ── */
     .filter-section {
-      padding: 0 0 32px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 16px 0 32px; position: sticky; top: 0; z-index: 100;
       background: linear-gradient(to bottom, var(--bg-dark) 85%, transparent);
-      padding-top: 16px;
     }
-    .filter-bar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      padding-bottom: 16px;
-    }
+    .filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; margin-bottom: 8px; }
+    .filter-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; width: 100%; text-align: center; margin-bottom: 4px; }
     .filter-btn {
-      padding: 7px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-secondary);
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
+      padding: 7px 16px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text-secondary);
+      font-family: inherit; font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
     }
     .filter-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text-primary); }
-    .filter-btn.active {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #0a0e1a;
-      font-weight: 700;
-    }
+    .filter-btn.active { background: var(--gold); border-color: var(--gold); color: #0a0e1a; font-weight: 700; }
+    .filter-btn.stage-btn.active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
 
-    /* ── Calendar Grid ── */
-    .calendar { display: flex; flex-direction: column; gap: 28px; padding-bottom: 80px; }
+    /* ── Phase Divider ── */
+    .phase-divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 16px 0 0;
+    }
+    .phase-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .phase-title {
+      font-size: 0.8rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 6px 18px;
+      border-radius: 999px; white-space: nowrap;
+    }
+    .phase-group { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.3); }
+    .phase-r32 { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+    .phase-r16 { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+    .phase-qf  { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .phase-sf  { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+    .phase-3rd { background: rgba(156,163,175,0.15); color: #d1d5db; border: 1px solid rgba(156,163,175,0.3); }
+    .phase-final { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+    /* ── Calendar ── */
+    .calendar { display: flex; flex-direction: column; gap: 20px; padding-bottom: 80px; }
 
     /* ── Day Card ── */
     .day-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 0; transform: translateY(20px); animation: fadeUp 0.4s forwards;
     }
-    .day-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-    }
+    .day-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Knockout card accent */
+    .day-card.knockout { border-color: rgba(124,58,237,0.25); }
+    .day-card.knockout .day-date-block { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+    .day-card.final-card { border-color: rgba(239,68,68,0.4); }
+    .day-card.final-card .day-date-block { background: linear-gradient(135deg, #ef4444, #f59e0b); }
+    .day-card.third-card { border-color: rgba(156,163,175,0.3); }
+    .day-card.third-card .day-date-block { background: linear-gradient(135deg, #6b7280, #9ca3af); }
 
     .day-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 18px 24px;
+      display: flex; align-items: center; gap: 16px; padding: 18px 24px;
       background: linear-gradient(90deg, var(--bg-card2) 0%, rgba(255,255,255,0.02) 100%);
       border-bottom: 1px solid var(--border);
     }
     .day-date-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 56px;
-      height: 56px;
-      background: var(--gold);
-      border-radius: 14px;
-      color: #0a0e1a;
-      font-weight: 900;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-width: 56px; height: 56px; background: var(--gold);
+      border-radius: 14px; color: #0a0e1a; font-weight: 900;
     }
-    .day-date-block .day-num {
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-    .day-date-block .day-mon {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
+    .day-date-block .day-num { font-size: 1.5rem; line-height: 1; }
+    .day-date-block .day-mon { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; }
     .day-info { flex: 1; }
-    .day-weekday {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-    .day-match-count {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-    .day-groups {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .group-pill {
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
+    .day-weekday { font-size: 1.05rem; font-weight: 700; }
+    .day-match-count { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+    .day-groups { display: flex; gap: 6px; flex-wrap: wrap; }
+    .group-pill { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; }
 
-    /* ── Match List ── */
+    /* ── Match Row ── */
     .matches { display: flex; flex-direction: column; }
     .match-row {
-      display: grid;
-      grid-template-columns: 90px 1fr auto 1fr 80px;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 24px;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
+      display: grid; grid-template-columns: 90px 1fr auto 1fr 120px;
+      align-items: center; gap: 12px; padding: 14px 24px;
+      border-bottom: 1px solid var(--border); transition: background 0.15s;
     }
     .match-row:last-child { border-bottom: none; }
     .match-row:hover { background: rgba(255,255,255,0.03); }
 
-    .match-time {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-align: center;
-      font-variant-numeric: tabular-nums;
-    }
-    .match-time-sub {
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      text-align: center;
-      margin-top: 2px;
-    }
+    /* Knockout match row */
+    .match-row.ko-row { grid-template-columns: 90px 1fr auto 1fr 120px; }
 
-    .team {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .match-time { font-size: 1.1rem; font-weight: 700; color: var(--gold); text-align: center; font-variant-numeric: tabular-nums; }
+    .match-time-sub { font-size: 0.65rem; color: var(--text-secondary); text-align: center; margin-top: 2px; }
+    .match-num { font-size: 0.6rem; font-weight: 700; color: #7c3aed; text-align: center; margin-top: 3px; letter-spacing: 0.05em; background: rgba(124,58,237,0.12); border-radius: 4px; padding: 1px 4px; }
+
+    .team { display: flex; align-items: center; gap: 10px; }
     .team.away { flex-direction: row-reverse; }
     .team.away .team-name { text-align: right; }
+    .team.away .team-name-en { text-align: right; }
+    .team-flag { font-size: 1.8rem; line-height: 1; flex-shrink: 0; }
+    .team-name { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
+    .team-name-en { font-size: 0.68rem; color: var(--text-secondary); margin-top: 1px; }
 
-    .team-flag {
-      font-size: 1.8rem;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-    .team-name {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .team-name-en {
-      font-size: 0.68rem;
-      color: var(--text-secondary);
-      margin-top: 1px;
-    }
+    /* Knockout TBD team */
+    .team-tbd { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); line-height: 1.4; }
+    .team-tbd strong { color: #a78bfa; font-size: 0.75rem; display: block; }
 
-    .vs-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-    }
-    .vs-text {
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: var(--text-secondary);
-      letter-spacing: 0.1em;
-    }
-    .group-badge {
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
+    .vs-block { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .vs-text { font-size: 0.72rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.1em; }
+    .group-badge { padding: 2px 8px; border-radius: 999px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; }
+    .ko-badge { padding: 2px 10px; border-radius: 999px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em; background: rgba(124,58,237,0.2); color: #a78bfa; border: 1px solid rgba(124,58,237,0.35); }
+    .ko-badge.final-badge { background: rgba(239,68,68,0.2); color: #fca5a5; border-color: rgba(239,68,68,0.4); }
+    .ko-badge.sf-badge { background: rgba(245,158,11,0.2); color: #fbbf24; border-color: rgba(245,158,11,0.4); }
+    .ko-badge.qf-badge { background: rgba(16,185,129,0.2); color: #34d399; border-color: rgba(16,185,129,0.4); }
+    .ko-badge.r16-badge { background: rgba(59,130,246,0.2); color: #60a5fa; border-color: rgba(59,130,246,0.4); }
+    .ko-badge.third-badge { background: rgba(156,163,175,0.2); color: #d1d5db; border-color: rgba(156,163,175,0.4); }
 
-    .match-venue {
-      font-size: 0.65rem;
-      color: var(--text-secondary);
-      text-align: right;
-      line-height: 1.4;
-    }
-    .match-venue .venue-country {
-      font-size: 0.6rem;
-      opacity: 0.7;
-    }
+    .match-venue { font-size: 0.65rem; color: var(--text-secondary); text-align: right; line-height: 1.5; }
+    .match-venue .venue-country { font-size: 0.6rem; opacity: 0.7; }
 
     /* ── Group Colors ── */
     .group-A { background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); }
@@ -313,46 +194,18 @@
 
     /* ── Legend ── */
     .legend {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 28px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
     }
-    .legend-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-    .legend-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 8px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-    }
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .legend-title { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .legend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text-secondary); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      .match-row {
-        grid-template-columns: 70px 1fr auto 1fr;
-        gap: 8px;
-        padding: 12px 16px;
-      }
+      .match-row { grid-template-columns: 70px 1fr auto 1fr; gap: 8px; padding: 12px 16px; }
+      .ko-row { grid-template-columns: 70px 1fr auto 1fr; }
       .match-venue { display: none; }
       .team-name { font-size: 0.82rem; }
       .team-flag { font-size: 1.5rem; }
@@ -361,36 +214,44 @@
       .hero-stats { gap: 24px; }
     }
     @media (max-width: 480px) {
-      .match-row { grid-template-columns: 60px 1fr 24px 1fr; }
+      .match-row { grid-template-columns: 60px 1fr 28px 1fr; }
+      .ko-row { grid-template-columns: 60px 1fr 28px 1fr; }
       .team-name-en { display: none; }
       .match-time { font-size: 0.9rem; }
     }
-
-    /* ── Scroll animation ── */
-    .day-card { opacity: 0; transform: translateY(20px); animation: fadeUp 0.4s forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-
 <div class="container">
+
   <!-- Hero -->
   <div class="hero">
     <div class="hero-badge">⚽ FIFA World Cup 2026</div>
-    <h1>小組賽完整行事曆</h1>
-    <p class="hero-sub">台灣時間 2026年6月12日 — 6月28日 · 共12組48隊</p>
+    <h1>完整賽程行事曆</h1>
+    <p class="hero-sub">台灣時間 2026年6月12日 — 7月19日 · 共48隊 104場賽事</p>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">48</div><div class="stat-label">參賽國家</div></div>
-      <div class="stat"><div class="stat-num">12</div><div class="stat-label">分組</div></div>
-      <div class="stat"><div class="stat-num">72</div><div class="stat-label">場小組賽</div></div>
-      <div class="stat"><div class="stat-num">17</div><div class="stat-label">比賽天數</div></div>
+      <div class="stat"><div class="stat-num">72</div><div class="stat-label">小組賽</div></div>
+      <div class="stat"><div class="stat-num">32</div><div class="stat-label">淘汰賽</div></div>
+      <div class="stat"><div class="stat-num">104</div><div class="stat-label">總場次</div></div>
     </div>
   </div>
 
-  <!-- Filter -->
+  <!-- Filters -->
   <div class="filter-section">
-    <div class="filter-bar" id="filterBar">
-      <button class="filter-btn active" data-filter="all" onclick="filterGroup('all')">全部</button>
+    <div class="filter-label">按階段篩選</div>
+    <div class="filter-row" id="stageFilterBar">
+      <button class="filter-btn stage-btn active" data-stage="all" onclick="filterStage('all')">全部賽程</button>
+      <button class="filter-btn stage-btn" data-stage="group" onclick="filterStage('group')">🏟 小組賽</button>
+      <button class="filter-btn stage-btn" data-stage="r32" onclick="filterStage('r32')">32強</button>
+      <button class="filter-btn stage-btn" data-stage="r16" onclick="filterStage('r16')">16強</button>
+      <button class="filter-btn stage-btn" data-stage="qf" onclick="filterStage('qf')">⚡ 8強</button>
+      <button class="filter-btn stage-btn" data-stage="sf" onclick="filterStage('sf')">🔥 4強</button>
+      <button class="filter-btn stage-btn" data-stage="final" onclick="filterStage('final')">🏆 決賽</button>
+    </div>
+    <div class="filter-label" style="margin-top:8px;">按小組篩選</div>
+    <div class="filter-row" id="groupFilterBar">
+      <button class="filter-btn active" data-filter="all" onclick="filterGroup('all')">全組</button>
       <button class="filter-btn group-A" data-filter="A" onclick="filterGroup('A')">A組</button>
       <button class="filter-btn group-B" data-filter="B" onclick="filterGroup('B')">B組</button>
       <button class="filter-btn group-C" data-filter="C" onclick="filterGroup('C')">C組</button>
@@ -417,28 +278,27 @@
 </div>
 
 <script>
-// ─── Data ───────────────────────────────────────────────────────────────────
+// ─── Flags & Names ────────────────────────────────────────────────────────────
 const FLAGS = {
-  '墨西哥':    '🇲🇽', '南非':      '🇿🇦', '南韓':      '🇰🇷', '捷克':      '🇨🇿',
-  '加拿大':    '🇨🇦', '波赫':      '🇧🇦', '卡達':      '🇶🇦', '瑞士':      '🇨🇭',
-  '巴西':      '🇧🇷', '摩洛哥':    '🇲🇦', '海地':      '🇭🇹', '蘇格蘭':    '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-  '美國':      '🇺🇸', '巴拉圭':    '🇵🇾', '澳洲':      '🇦🇺', '土耳其':    '🇹🇷',
-  '德國':      '🇩🇪', '古拉索':    '🇨🇼', '象牙海岸':  '🇨🇮', '厄瓜多':    '🇪🇨',
-  '荷蘭':      '🇳🇱', '日本':      '🇯🇵', '瑞典':      '🇸🇪', '突尼西亞':  '🇹🇳',
-  '比利時':    '🇧🇪', '埃及':      '🇪🇬', '伊朗':      '🇮🇷', '紐西蘭':    '🇳🇿',
-  '西班牙':    '🇪🇸', '維德角':    '🇨🇻', '沙烏地阿拉伯': '🇸🇦', '烏拉圭':    '🇺🇾',
-  '法國':      '🇫🇷', '塞內加爾':  '🇸🇳', '伊拉克':    '🇮🇶', '挪威':      '🇳🇴',
-  '阿根廷':    '🇦🇷', '阿爾及利亞':'🇩🇿', '奧地利':    '🇦🇹', '約旦':      '🇯🇴',
-  '葡萄牙':    '🇵🇹', '剛果民主共和國': '🇨🇩', '烏茲別克':  '🇺🇿', '哥倫比亞':  '🇨🇴',
-  '英格蘭':    '🇬🇧', '克羅埃西亞':'🇭🇷', '迦納':      '🇬🇭', '巴拿馬':    '🇵🇦',
+  '墨西哥':'🇲🇽','南非':'🇿🇦','南韓':'🇰🇷','捷克':'🇨🇿',
+  '加拿大':'🇨🇦','波赫':'🇧🇦','卡達':'🇶🇦','瑞士':'🇨🇭',
+  '巴西':'🇧🇷','摩洛哥':'🇲🇦','海地':'🇭🇹','蘇格蘭':'🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  '美國':'🇺🇸','巴拉圭':'🇵🇾','澳洲':'🇦🇺','土耳其':'🇹🇷',
+  '德國':'🇩🇪','古拉索':'🇨🇼','象牙海岸':'🇨🇮','厄瓜多':'🇪🇨',
+  '荷蘭':'🇳🇱','日本':'🇯🇵','瑞典':'🇸🇪','突尼西亞':'🇹🇳',
+  '比利時':'🇧🇪','埃及':'🇪🇬','伊朗':'🇮🇷','紐西蘭':'🇳🇿',
+  '西班牙':'🇪🇸','維德角':'🇨🇻','沙烏地阿拉伯':'🇸🇦','烏拉圭':'🇺🇾',
+  '法國':'🇫🇷','塞內加爾':'🇸🇳','伊拉克':'🇮🇶','挪威':'🇳🇴',
+  '阿根廷':'🇦🇷','阿爾及利亞':'🇩🇿','奧地利':'🇦🇹','約旦':'🇯🇴',
+  '葡萄牙':'🇵🇹','剛果民主共和國':'🇨🇩','烏茲別克':'🇺🇿','哥倫比亞':'🇨🇴',
+  '英格蘭':'🇬🇧','克羅埃西亞':'🇭🇷','迦納':'🇬🇭','巴拿馬':'🇵🇦',
 };
-
 const EN_NAMES = {
   '墨西哥':'Mexico','南非':'South Africa','南韓':'South Korea','捷克':'Czech Republic',
   '加拿大':'Canada','波赫':'Bosnia & Herz.','卡達':'Qatar','瑞士':'Switzerland',
   '巴西':'Brazil','摩洛哥':'Morocco','海地':'Haiti','蘇格蘭':'Scotland',
   '美國':'USA','巴拉圭':'Paraguay','澳洲':'Australia','土耳其':'Türkiye',
-  '德國':'Germany','古拉索':'Curaçao','象牙海岸':'Côte d\'Ivoire','厄瓜多':'Ecuador',
+  '德國':'Germany','古拉索':'Curaçao','象牙海岸':"Côte d'Ivoire",'厄瓜多':'Ecuador',
   '荷蘭':'Netherlands','日本':'Japan','瑞典':'Sweden','突尼西亞':'Tunisia',
   '比利時':'Belgium','埃及':'Egypt','伊朗':'Iran','紐西蘭':'New Zealand',
   '西班牙':'Spain','維德角':'Cape Verde','沙烏地阿拉伯':'Saudi Arabia','烏拉圭':'Uruguay',
@@ -447,259 +307,567 @@ const EN_NAMES = {
   '葡萄牙':'Portugal','剛果民主共和國':'DR Congo','烏茲別克':'Uzbekistan','哥倫比亞':'Colombia',
   '英格蘭':'England','克羅埃西亞':'Croatia','迦納':'Ghana','巴拿馬':'Panama',
 };
-
 const GROUP_TEAMS = {
-  A: ['墨西哥','南非','南韓','捷克'],
-  B: ['加拿大','波赫','卡達','瑞士'],
-  C: ['巴西','摩洛哥','海地','蘇格蘭'],
-  D: ['美國','巴拉圭','澳洲','土耳其'],
-  E: ['德國','古拉索','象牙海岸','厄瓜多'],
-  F: ['荷蘭','日本','瑞典','突尼西亞'],
-  G: ['比利時','埃及','伊朗','紐西蘭'],
-  H: ['西班牙','維德角','沙烏地阿拉伯','烏拉圭'],
-  I: ['法國','塞內加爾','伊拉克','挪威'],
-  J: ['阿根廷','阿爾及利亞','奧地利','約旦'],
-  K: ['葡萄牙','剛果民主共和國','烏茲別克','哥倫比亞'],
-  L: ['英格蘭','克羅埃西亞','迦納','巴拿馬'],
+  A:['墨西哥','南非','南韓','捷克'],  B:['加拿大','波赫','卡達','瑞士'],
+  C:['巴西','摩洛哥','海地','蘇格蘭'],D:['美國','巴拉圭','澳洲','土耳其'],
+  E:['德國','古拉索','象牙海岸','厄瓜多'],F:['荷蘭','日本','瑞典','突尼西亞'],
+  G:['比利時','埃及','伊朗','紐西蘭'],H:['西班牙','維德角','沙烏地阿拉伯','烏拉圭'],
+  I:['法國','塞內加爾','伊拉克','挪威'],J:['阿根廷','阿爾及利亞','奧地利','約旦'],
+  K:['葡萄牙','剛果民主共和國','烏茲別克','哥倫比亞'],L:['英格蘭','克羅埃西亞','迦納','巴拿馬'],
+};
+const TEAM_GROUP = {};
+Object.entries(GROUP_TEAMS).forEach(([g,ts])=>ts.forEach(t=>TEAM_GROUP[t]=g));
+
+const GROUP_COLOR_MAP = {
+  A:'#e74c3c',B:'#e67e22',C:'#f1c40f',D:'#2ecc71',E:'#1abc9c',F:'#3498db',
+  G:'#9b59b6',H:'#e91e63',I:'#ff5722',J:'#90a4ae',K:'#a1887f',L:'#00bcd4',
 };
 
-// Build team → group lookup
-const TEAM_GROUP = {};
-Object.entries(GROUP_TEAMS).forEach(([g, teams]) => teams.forEach(t => TEAM_GROUP[t] = g));
-
-// Raw match data: [date, time, home, away, venue]
-// date format: MMDD, time: HH:MM
-const RAW_MATCHES = [
-  // A組
-  ['0612','03:00','墨西哥','南非','墨西哥阿茲特克體育場'],
-  ['0612','10:00','南韓','捷克','墨西哥阿克倫球場'],
-  ['0619','00:00','捷克','南非','美國梅賽德斯賓士體育場'],
-  ['0619','09:00','墨西哥','南韓','墨西哥阿克倫球場'],
-  ['0625','09:00','捷克','墨西哥','墨西哥阿茲特克體育場'],
-  ['0625','09:00','南非','南韓','墨西哥BBVA體育場'],
-  // B組
-  ['0613','03:00','加拿大','波赫','加拿大BMO球場'],
-  ['0614','03:00','卡達','瑞士','美國李維斯體育場'],
-  ['0619','03:00','瑞士','波赫','美國SoFi體育場'],
-  ['0619','06:00','加拿大','卡達','加拿大卑詩體育館'],
-  ['0625','03:00','瑞士','加拿大','加拿大卑詩體育館'],
-  ['0625','03:00','波赫','卡達','美國流明球場'],
-  // C組
-  ['0614','06:00','巴西','摩洛哥','美國大都會人壽體育場'],
-  ['0614','09:00','海地','蘇格蘭','美國吉列體育場'],
-  ['0620','06:00','蘇格蘭','摩洛哥','美國吉列體育場'],
-  ['0620','09:00','巴西','海地','美國林肯金融球場'],
-  ['0625','06:00','蘇格蘭','巴西','美國硬石體育場'],
-  ['0625','06:00','摩洛哥','海地','美國梅賽德斯賓士體育場'],
+// ─── Group Stage Data ────────────────────────────────────────────────────────
+// Format: [MMDD, time, home, away, venue, matchNum]
+const GROUP_MATCHES = [
+  // A組 (M1-6)
+  ['0612','03:00','墨西哥','南非','🇲🇽 阿茲特克體育場','M1'],
+  ['0612','10:00','南韓','捷克','🇲🇽 阿克倫球場','M2'],
+  ['0619','00:00','捷克','南非','🇺🇸 梅賽德斯賓士體育場','M37'],
+  ['0619','09:00','墨西哥','南韓','🇲🇽 阿克倫球場','M38'],
+  ['0625','09:00','捷克','墨西哥','🇲🇽 阿茲特克體育場','M65'],
+  ['0625','09:00','南非','南韓','🇲🇽 BBVA體育場','M66'],
+  // B組 (M7-12)
+  ['0613','03:00','加拿大','波赫','🇨🇦 BMO球場','M7'],
+  ['0614','03:00','卡達','瑞士','🇺🇸 李維斯體育場','M13'],
+  ['0619','03:00','瑞士','波赫','🇺🇸 SoFi體育場','M39'],
+  ['0619','06:00','加拿大','卡達','🇨🇦 卑詩體育館','M40'],
+  ['0625','03:00','瑞士','加拿大','🇨🇦 卑詩體育館','M67'],
+  ['0625','03:00','波赫','卡達','🇺🇸 流明球場','M68'],
+  // C組 (M13-18)
+  ['0614','06:00','巴西','摩洛哥','🇺🇸 大都會人壽體育場','M14'],
+  ['0614','09:00','海地','蘇格蘭','🇺🇸 吉列體育場','M15'],
+  ['0620','06:00','蘇格蘭','摩洛哥','🇺🇸 吉列體育場','M43'],
+  ['0620','09:00','巴西','海地','🇺🇸 林肯金融球場','M44'],
+  ['0625','06:00','蘇格蘭','巴西','🇺🇸 硬石體育場','M69'],
+  ['0625','06:00','摩洛哥','海地','🇺🇸 梅賽德斯賓士體育場','M70'],
   // D組
-  ['0613','09:00','美國','巴拉圭','美國SoFi體育場'],
-  ['0614','12:00','澳洲','土耳其','加拿大卑詩體育館'],
-  ['0620','03:00','美國','澳洲','美國流明球場'],
-  ['0620','12:00','土耳其','巴拉圭','美國李維斯體育場'],
-  ['0626','10:00','土耳其','美國','美國SoFi體育場'],
-  ['0626','10:00','巴拉圭','澳洲','美國李維斯體育場'],
+  ['0613','09:00','美國','巴拉圭','🇺🇸 SoFi體育場','M8'],
+  ['0614','12:00','澳洲','土耳其','🇨🇦 卑詩體育館','M16'],
+  ['0620','03:00','美國','澳洲','🇺🇸 流明球場','M41'],
+  ['0620','12:00','土耳其','巴拉圭','🇺🇸 李維斯體育場','M42'],
+  ['0626','10:00','土耳其','美國','🇺🇸 SoFi體育場','M71'],
+  ['0626','10:00','巴拉圭','澳洲','🇺🇸 李維斯體育場','M72'],
   // E組
-  ['0615','01:00','德國','古拉索','美國NRG體育場'],
-  ['0615','07:00','象牙海岸','厄瓜多','美國林肯金融球場'],
-  ['0621','04:00','德國','象牙海岸','加拿大BMO球場'],
-  ['0621','08:00','厄瓜多','古拉索','美國箭頭體育場'],
-  ['0626','04:00','厄瓜多','德國','美國大都會人壽體育場'],
-  ['0626','04:00','古拉索','象牙海岸','美國林肯金融球場'],
+  ['0615','01:00','德國','古拉索','🇺🇸 NRG體育場','M17'],
+  ['0615','07:00','象牙海岸','厄瓜多','🇺🇸 林肯金融球場','M18'],
+  ['0621','04:00','德國','象牙海岸','🇨🇦 BMO球場','M45'],
+  ['0621','08:00','厄瓜多','古拉索','🇺🇸 箭頭體育場','M46'],
+  ['0626','04:00','厄瓜多','德國','🇺🇸 大都會人壽體育場','M73_E1'],
+  ['0626','04:00','古拉索','象牙海岸','🇺🇸 林肯金融球場','M73_E2'],
   // F組
-  ['0615','04:00','荷蘭','日本','美國AT&T體育場'],
-  ['0615','10:00','瑞典','突尼西亞','墨西哥BBVA體育場'],
-  ['0621','01:00','荷蘭','瑞典','美國NRG體育場'],
-  ['0621','12:00','突尼西亞','日本','墨西哥BBVA體育場'],
-  ['0626','07:00','日本','瑞典','美國AT&T體育場'],
-  ['0626','07:00','突尼西亞','荷蘭','美國箭頭體育場'],
+  ['0615','04:00','荷蘭','日本','🇺🇸 AT&T體育場','M19'],
+  ['0615','10:00','瑞典','突尼西亞','🇲🇽 BBVA體育場','M20'],
+  ['0621','01:00','荷蘭','瑞典','🇺🇸 NRG體育場','M47'],
+  ['0621','12:00','突尼西亞','日本','🇲🇽 BBVA體育場','M48'],
+  ['0626','07:00','日本','瑞典','🇺🇸 AT&T體育場','M73_F1'],
+  ['0626','07:00','突尼西亞','荷蘭','🇺🇸 箭頭體育場','M73_F2'],
   // G組
-  ['0616','03:00','比利時','埃及','美國流明球場'],
-  ['0616','09:00','伊朗','紐西蘭','美國SoFi體育場'],
-  ['0622','03:00','比利時','伊朗','美國SoFi體育場'],
-  ['0622','09:00','紐西蘭','埃及','加拿大卑詩體育館'],
-  ['0627','11:00','紐西蘭','比利時','加拿大卑詩體育館'],
-  ['0627','11:00','埃及','伊朗','美國流明球場'],
+  ['0616','03:00','比利時','埃及','🇺🇸 流明球場','M25'],
+  ['0616','09:00','伊朗','紐西蘭','🇺🇸 SoFi體育場','M26'],
+  ['0622','03:00','比利時','伊朗','🇺🇸 SoFi體育場','M49'],
+  ['0622','09:00','紐西蘭','埃及','🇨🇦 卑詩體育館','M50'],
+  ['0627','11:00','紐西蘭','比利時','🇨🇦 卑詩體育館','M73_G1'],
+  ['0627','11:00','埃及','伊朗','🇺🇸 流明球場','M73_G2'],
   // H組
-  ['0616','00:00','西班牙','維德角','美國梅賽德斯賓士體育場'],
-  ['0616','06:00','沙烏地阿拉伯','烏拉圭','美國硬石體育場'],
-  ['0622','00:00','西班牙','沙烏地阿拉伯','美國梅賽德斯賓士體育場'],
-  ['0622','06:00','烏拉圭','維德角','美國硬石體育場'],
-  ['0627','08:00','維德角','沙烏地阿拉伯','美國NRG體育場'],
-  ['0627','08:00','烏拉圭','西班牙','墨西哥阿克倫球場'],
+  ['0616','00:00','西班牙','維德角','🇺🇸 梅賽德斯賓士體育場','M23'],
+  ['0616','06:00','沙烏地阿拉伯','烏拉圭','🇺🇸 硬石體育場','M24'],
+  ['0622','00:00','西班牙','沙烏地阿拉伯','🇺🇸 梅賽德斯賓士體育場','M51'],
+  ['0622','06:00','烏拉圭','維德角','🇺🇸 硬石體育場','M52'],
+  ['0627','08:00','維德角','沙烏地阿拉伯','🇺🇸 NRG體育場','M73_H1'],
+  ['0627','08:00','烏拉圭','西班牙','🇲🇽 阿克倫球場','M73_H2'],
   // I組
-  ['0617','03:00','法國','塞內加爾','美國大都會人壽體育場'],
-  ['0617','06:00','伊拉克','挪威','美國吉列體育場'],
-  ['0623','05:00','法國','伊拉克','美國林肯金融球場'],
-  ['0623','08:00','挪威','塞內加爾','美國大都會人壽體育場'],
-  ['0627','03:00','挪威','法國','美國吉列體育場'],
-  ['0627','03:00','塞內加爾','伊拉克','加拿大BMO球場'],
+  ['0617','03:00','法國','塞內加爾','🇺🇸 大都會人壽體育場','M29'],
+  ['0617','06:00','伊拉克','挪威','🇺🇸 吉列體育場','M30'],
+  ['0623','05:00','法國','伊拉克','🇺🇸 林肯金融球場','M55'],
+  ['0623','08:00','挪威','塞內加爾','🇺🇸 大都會人壽體育場','M56'],
+  ['0627','03:00','挪威','法國','🇺🇸 吉列體育場','M73_I1'],
+  ['0627','03:00','塞內加爾','伊拉克','🇨🇦 BMO球場','M73_I2'],
   // J組
-  ['0617','09:00','阿根廷','阿爾及利亞','美國箭頭體育場'],
-  ['0617','12:00','奧地利','約旦','美國李維斯體育場'],
-  ['0623','01:00','阿根廷','奧地利','美國AT&T體育場'],
-  ['0623','11:00','約旦','阿爾及利亞','美國李維斯體育場'],
-  ['0628','10:00','約旦','阿根廷','美國AT&T體育場'],
-  ['0628','10:00','阿爾及利亞','奧地利','美國箭頭體育場'],
+  ['0617','09:00','阿根廷','阿爾及利亞','🇺🇸 箭頭體育場','M31'],
+  ['0617','12:00','奧地利','約旦','🇺🇸 李維斯體育場','M32'],
+  ['0623','01:00','阿根廷','奧地利','🇺🇸 AT&T體育場','M57'],
+  ['0623','11:00','約旦','阿爾及利亞','🇺🇸 李維斯體育場','M58'],
+  ['0628','10:00','約旦','阿根廷','🇺🇸 AT&T體育場','M73_J1'],
+  ['0628','10:00','阿爾及利亞','奧地利','🇺🇸 箭頭體育場','M73_J2'],
   // K組
-  ['0618','01:00','葡萄牙','剛果民主共和國','美國NRG體育場'],
-  ['0618','10:00','烏茲別克','哥倫比亞','墨西哥阿茲特克體育場'],
-  ['0624','01:00','葡萄牙','烏茲別克','美國NRG體育場'],
-  ['0624','10:00','哥倫比亞','剛果民主共和國','墨西哥阿克倫球場'],
-  ['0628','07:30','哥倫比亞','葡萄牙','美國硬石體育場'],
-  ['0628','07:30','剛果民主共和國','烏茲別克','美國梅賽德斯賓士體育場'],
+  ['0618','01:00','葡萄牙','剛果民主共和國','🇺🇸 NRG體育場','M33'],
+  ['0618','10:00','烏茲別克','哥倫比亞','🇲🇽 阿茲特克體育場','M34'],
+  ['0624','01:00','葡萄牙','烏茲別克','🇺🇸 NRG體育場','M59'],
+  ['0624','10:00','哥倫比亞','剛果民主共和國','🇲🇽 阿克倫球場','M60'],
+  ['0628','07:30','哥倫比亞','葡萄牙','🇺🇸 硬石體育場','M73_K1'],
+  ['0628','07:30','剛果民主共和國','烏茲別克','🇺🇸 梅賽德斯賓士體育場','M73_K2'],
   // L組
-  ['0618','04:00','英格蘭','克羅埃西亞','美國AT&T體育場'],
-  ['0618','07:00','迦納','巴拿馬','加拿大BMO球場'],
-  ['0624','04:00','英格蘭','迦納','美國吉列體育場'],
-  ['0624','07:00','巴拿馬','克羅埃西亞','加拿大BMO球場'],
-  ['0628','05:00','巴拿馬','英格蘭','美國大都會人壽體育場'],
-  ['0628','05:00','克羅埃西亞','迦納','美國林肯金融球場'],
+  ['0618','04:00','英格蘭','克羅埃西亞','🇺🇸 AT&T體育場','M35'],
+  ['0618','07:00','迦納','巴拿馬','🇨🇦 BMO球場','M36'],
+  ['0624','04:00','英格蘭','迦納','🇺🇸 吉列體育場','M61'],
+  ['0624','07:00','巴拿馬','克羅埃西亞','🇨🇦 BMO球場','M62'],
+  ['0628','05:00','巴拿馬','英格蘭','🇺🇸 大都會人壽體育場','M73_L1'],
+  ['0628','05:00','克羅埃西亞','迦納','🇺🇸 林肯金融球場','M73_L2'],
 ];
 
-// ─── Build Day Data ──────────────────────────────────────────────────────────
-function getGroup(team) { return TEAM_GROUP[team] || '?'; }
+// ─── Knockout Stage Data ─────────────────────────────────────────────────────
+// Format: { date, time, matchNum, home, away, venue, stage, badgeClass }
+// Home/away are objects: { label, sub } for TBD slots
 
-function parseDate(mmdd) {
-  const m = parseInt(mmdd.slice(0,2));
-  const d = parseInt(mmdd.slice(2,4));
-  return { m, d };
-}
+const KNOCKOUT_DAYS = [
+  // ── 32強 ──────────────────────────────────────────────────────
+  { date:'0628', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M73', time:'（日本台灣時間請參考當地）',
+        home:{ label:'A組第二名', sub:'Runner-up Group A' },
+        away:{ label:'B組第二名', sub:'Runner-up Group B' },
+        venue:'🇺🇸 洛杉磯 SoFi 體育場' },
+    ]
+  },
+  { date:'0629', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M74', time:'',
+        home:{ label:'E組第一名', sub:'Winner Group E' },
+        away:{ label:'A/B/C/D/F 最佳第三', sub:'Best 3rd of A/B/C/D/F' },
+        venue:'🇺🇸 波士頓 吉列體育場' },
+      { num:'M75', time:'',
+        home:{ label:'F組第一名', sub:'Winner Group F' },
+        away:{ label:'C組第二名', sub:'Runner-up Group C' },
+        venue:'🇲🇽 蒙特瑞 BBVA體育場' },
+      { num:'M76', time:'',
+        home:{ label:'C組第一名', sub:'Winner Group C' },
+        away:{ label:'F組第二名', sub:'Runner-up Group F' },
+        venue:'🇺🇸 休士頓 NRG體育場' },
+    ]
+  },
+  { date:'0630', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M77', time:'',
+        home:{ label:'I組第一名', sub:'Winner Group I' },
+        away:{ label:'C/D/F/G/H 最佳第三', sub:'Best 3rd of C/D/F/G/H' },
+        venue:'🇺🇸 紐澤西 大都會人壽體育場' },
+      { num:'M78', time:'',
+        home:{ label:'E組第二名', sub:'Runner-up Group E' },
+        away:{ label:'I組第二名', sub:'Runner-up Group I' },
+        venue:'🇺🇸 達拉斯 AT&T體育場' },
+      { num:'M79', time:'',
+        home:{ label:'A組第一名', sub:'Winner Group A' },
+        away:{ label:'C/E/F/H/I 最佳第三', sub:'Best 3rd of C/E/F/H/I' },
+        venue:'🇲🇽 墨西哥城 阿茲特克體育場' },
+    ]
+  },
+  { date:'0701', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M80', time:'',
+        home:{ label:'L組第一名', sub:'Winner Group L' },
+        away:{ label:'E/H/I/J/K 最佳第三', sub:'Best 3rd of E/H/I/J/K' },
+        venue:'🇺🇸 亞特蘭大 梅賽德斯賓士體育場' },
+      { num:'M81', time:'',
+        home:{ label:'D組第一名', sub:'Winner Group D' },
+        away:{ label:'B/E/F/I/J 最佳第三', sub:'Best 3rd of B/E/F/I/J' },
+        venue:'🇺🇸 舊金山 李維斯體育場' },
+      { num:'M82', time:'',
+        home:{ label:'G組第一名', sub:'Winner Group G' },
+        away:{ label:'A/E/H/I/J 最佳第三', sub:'Best 3rd of A/E/H/I/J' },
+        venue:'🇺🇸 西雅圖 流明球場' },
+    ]
+  },
+  { date:'0702', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M83', time:'',
+        home:{ label:'K組第二名', sub:'Runner-up Group K' },
+        away:{ label:'L組第二名', sub:'Runner-up Group L' },
+        venue:'🇨🇦 多倫多 BMO球場' },
+      { num:'M84', time:'',
+        home:{ label:'H組第一名', sub:'Winner Group H' },
+        away:{ label:'J組第二名', sub:'Runner-up Group J' },
+        venue:'🇺🇸 洛杉磯 SoFi體育場' },
+      { num:'M85', time:'',
+        home:{ label:'B組第一名', sub:'Winner Group B' },
+        away:{ label:'E/F/G/I/J 最佳第三', sub:'Best 3rd of E/F/G/I/J' },
+        venue:'🇨🇦 溫哥華 卑詩體育館' },
+    ]
+  },
+  { date:'0703', stage:'r32', label:'32強', badgeClass:'ko-badge',
+    matches:[
+      { num:'M86', time:'',
+        home:{ label:'J組第一名', sub:'Winner Group J' },
+        away:{ label:'H組第二名', sub:'Runner-up Group H' },
+        venue:'🇺🇸 邁阿密 硬石體育場' },
+      { num:'M87', time:'',
+        home:{ label:'K組第一名', sub:'Winner Group K' },
+        away:{ label:'D/E/I/J/L 最佳第三', sub:'Best 3rd of D/E/I/J/L' },
+        venue:'🇺🇸 堪薩斯城 箭頭體育場' },
+      { num:'M88', time:'',
+        home:{ label:'D組第二名', sub:'Runner-up Group D' },
+        away:{ label:'G組第二名', sub:'Runner-up Group G' },
+        venue:'🇺🇸 達拉斯 AT&T體育場' },
+    ]
+  },
+  // ── 16強 ──────────────────────────────────────────────────────
+  { date:'0704', stage:'r16', label:'16強', badgeClass:'ko-badge r16-badge',
+    matches:[
+      { num:'M89', time:'',
+        home:{ label:'M74 勝者', sub:'Winner of Match 74' },
+        away:{ label:'M77 勝者', sub:'Winner of Match 77' },
+        venue:'🇺🇸 費城 林肯金融球場' },
+      { num:'M90', time:'',
+        home:{ label:'M73 勝者', sub:'Winner of Match 73' },
+        away:{ label:'M75 勝者', sub:'Winner of Match 75' },
+        venue:'🇺🇸 休士頓 NRG體育場' },
+    ]
+  },
+  { date:'0705', stage:'r16', label:'16強', badgeClass:'ko-badge r16-badge',
+    matches:[
+      { num:'M91', time:'',
+        home:{ label:'M76 勝者', sub:'Winner of Match 76' },
+        away:{ label:'M78 勝者', sub:'Winner of Match 78' },
+        venue:'🇺🇸 紐澤西 大都會人壽體育場' },
+      { num:'M92', time:'',
+        home:{ label:'M79 勝者', sub:'Winner of Match 79' },
+        away:{ label:'M80 勝者', sub:'Winner of Match 80' },
+        venue:'🇲🇽 墨西哥城 阿茲特克體育場' },
+    ]
+  },
+  { date:'0706', stage:'r16', label:'16強', badgeClass:'ko-badge r16-badge',
+    matches:[
+      { num:'M93', time:'',
+        home:{ label:'M83 勝者', sub:'Winner of Match 83' },
+        away:{ label:'M84 勝者', sub:'Winner of Match 84' },
+        venue:'🇺🇸 達拉斯 AT&T體育場' },
+      { num:'M94', time:'',
+        home:{ label:'M81 勝者', sub:'Winner of Match 81' },
+        away:{ label:'M82 勝者', sub:'Winner of Match 82' },
+        venue:'🇺🇸 西雅圖 流明球場' },
+    ]
+  },
+  { date:'0707', stage:'r16', label:'16強', badgeClass:'ko-badge r16-badge',
+    matches:[
+      { num:'M95', time:'',
+        home:{ label:'M86 勝者', sub:'Winner of Match 86' },
+        away:{ label:'M88 勝者', sub:'Winner of Match 88' },
+        venue:'🇺🇸 亞特蘭大 梅賽德斯賓士體育場' },
+      { num:'M96', time:'',
+        home:{ label:'M85 勝者', sub:'Winner of Match 85' },
+        away:{ label:'M87 勝者', sub:'Winner of Match 87' },
+        venue:'🇨🇦 溫哥華 卑詩體育館' },
+    ]
+  },
+  // ── 8強 ───────────────────────────────────────────────────────
+  { date:'0709', stage:'qf', label:'8強', badgeClass:'ko-badge qf-badge',
+    matches:[
+      { num:'M97', time:'',
+        home:{ label:'M89 勝者', sub:'Winner of Match 89' },
+        away:{ label:'M90 勝者', sub:'Winner of Match 90' },
+        venue:'🇺🇸 波士頓 吉列體育場' },
+    ]
+  },
+  { date:'0710', stage:'qf', label:'8強', badgeClass:'ko-badge qf-badge',
+    matches:[
+      { num:'M98', time:'',
+        home:{ label:'M93 勝者', sub:'Winner of Match 93' },
+        away:{ label:'M94 勝者', sub:'Winner of Match 94' },
+        venue:'🇺🇸 洛杉磯 SoFi體育場' },
+    ]
+  },
+  { date:'0711', stage:'qf', label:'8強', badgeClass:'ko-badge qf-badge',
+    matches:[
+      { num:'M99', time:'',
+        home:{ label:'M91 勝者', sub:'Winner of Match 91' },
+        away:{ label:'M92 勝者', sub:'Winner of Match 92' },
+        venue:'🇺🇸 邁阿密 硬石體育場' },
+      { num:'M100', time:'',
+        home:{ label:'M95 勝者', sub:'Winner of Match 95' },
+        away:{ label:'M96 勝者', sub:'Winner of Match 96' },
+        venue:'🇺🇸 堪薩斯城 箭頭體育場' },
+    ]
+  },
+  // ── 4強 ───────────────────────────────────────────────────────
+  { date:'0714', stage:'sf', label:'4強', badgeClass:'ko-badge sf-badge',
+    matches:[
+      { num:'M101', time:'',
+        home:{ label:'M97 勝者', sub:'Winner of Match 97' },
+        away:{ label:'M98 勝者', sub:'Winner of Match 98' },
+        venue:'🇺🇸 達拉斯 AT&T體育場' },
+    ]
+  },
+  { date:'0715', stage:'sf', label:'4強', badgeClass:'ko-badge sf-badge',
+    matches:[
+      { num:'M102', time:'',
+        home:{ label:'M99 勝者', sub:'Winner of Match 99' },
+        away:{ label:'M100 勝者', sub:'Winner of Match 100' },
+        venue:'🇺🇸 亞特蘭大 梅賽德斯賓士體育場' },
+    ]
+  },
+  // ── 季軍賽 ────────────────────────────────────────────────────
+  { date:'0718', stage:'3rd', label:'季軍賽', badgeClass:'ko-badge third-badge',
+    matches:[
+      { num:'M103', time:'',
+        home:{ label:'M101 敗者', sub:'Loser of Match 101' },
+        away:{ label:'M102 敗者', sub:'Loser of Match 102' },
+        venue:'🇺🇸 邁阿密 硬石體育場' },
+    ]
+  },
+  // ── 決賽 ──────────────────────────────────────────────────────
+  { date:'0719', stage:'final', label:'🏆 決賽', badgeClass:'ko-badge final-badge',
+    matches:[
+      { num:'M104', time:'',
+        home:{ label:'M101 勝者', sub:'Winner of Match 101' },
+        away:{ label:'M102 勝者', sub:'Winner of Match 102' },
+        venue:'🇺🇸 紐澤西 大都會人壽體育場' },
+    ]
+  },
+];
 
-const MONTHS = ['','一','二','三','四','五','六','七','八','九','十','十一','十二'];
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const WEEKDAYS = ['日','一','二','三','四','五','六'];
+
+function parseMMDD(mmdd) {
+  const mo = parseInt(mmdd.slice(0,2)), d = parseInt(mmdd.slice(2,4));
+  const isJuly = mo === 7;
+  const yr = 2026;
+  return { m: mo, d, dateObj: new Date(yr, mo-1, d) };
+}
 
 function dateKey(mmdd) { return `2026-${mmdd.slice(0,2)}-${mmdd.slice(2,4)}`; }
 
-// Group by date
-const dayMap = {};
-RAW_MATCHES.forEach(([mmdd, time, home, away, venue]) => {
+function venueLabel(v) { return v || ''; }
+
+// ─── Build group-stage day map ────────────────────────────────────────────────
+const groupDayMap = {};
+GROUP_MATCHES.forEach(([mmdd, time, home, away, venue, matchNum]) => {
   const key = dateKey(mmdd);
-  if (!dayMap[key]) dayMap[key] = { mmdd, matches: [] };
-  const g = getGroup(home);
-  dayMap[key].matches.push({ time, home, away, venue, group: g });
+  if (!groupDayMap[key]) groupDayMap[key] = { mmdd, matches: [] };
+  groupDayMap[key].matches.push({ time, home, away, venue, group: TEAM_GROUP[home] || '?', matchNum });
 });
+const sortedGroupDays = Object.entries(groupDayMap).sort((a,b)=>a[0]<b[0]?-1:1);
 
-// Sort days
-const sortedDays = Object.entries(dayMap).sort((a,b) => a[0] < b[0] ? -1 : 1);
+// Build knockout day map
+const koDayMap = {};
+KNOCKOUT_DAYS.forEach(dayData => {
+  const key = dateKey(dayData.date);
+  koDayMap[key] = dayData;
+});
+const sortedKoDays = Object.keys(koDayMap).sort();
 
-// ─── Render Legend ───────────────────────────────────────────────────────────
+// ─── Legend ──────────────────────────────────────────────────────────────────
 const legendGrid = document.getElementById('legendGrid');
-const GROUP_COLOR_MAP = {
-  A:'#e74c3c', B:'#e67e22', C:'#f1c40f', D:'#2ecc71', E:'#1abc9c',
-  F:'#3498db', G:'#9b59b6', H:'#e91e63', I:'#ff5722', J:'#90a4ae',
-  K:'#a1887f', L:'#00bcd4'
-};
 Object.entries(GROUP_TEAMS).forEach(([g, teams]) => {
   const item = document.createElement('div');
   item.className = 'legend-item';
-  item.innerHTML = `
-    <div class="legend-dot" style="background:${GROUP_COLOR_MAP[g]}"></div>
-    <span><strong style="color:${GROUP_COLOR_MAP[g]}">${g}組</strong>　${teams.map(t => (FLAGS[t]||'🏴') + t).join('、')}</span>
-  `;
+  item.innerHTML = `<div class="legend-dot" style="background:${GROUP_COLOR_MAP[g]}"></div>
+    <span><strong style="color:${GROUP_COLOR_MAP[g]}">${g}組</strong>　${teams.map(t=>(FLAGS[t]||'🏴')+t).join('、')}</span>`;
   legendGrid.appendChild(item);
 });
 
-// ─── Render Calendar ─────────────────────────────────────────────────────────
+// ─── Render ──────────────────────────────────────────────────────────────────
 const calendar = document.getElementById('calendar');
 
-function venueShort(v) {
-  // Extract country and short stadium name
-  if (v.startsWith('美國')) return { country: '🇺🇸 美國', name: v.replace('美國','') };
-  if (v.startsWith('加拿大')) return { country: '🇨🇦 加拿大', name: v.replace('加拿大','') };
-  if (v.startsWith('墨西哥')) return { country: '🇲🇽 墨西哥', name: v.replace('墨西哥','') };
-  return { country: '', name: v };
+let currentGroupFilter = 'all';
+let currentStageFilter = 'all';
+
+function renderGroupMatch(match) {
+  const hFlag = FLAGS[match.home] || '🏴';
+  const aFlag = FLAGS[match.away] || '🏴';
+  const hEn = EN_NAMES[match.home] || '';
+  const aEn = EN_NAMES[match.away] || '';
+  return `
+  <div class="match-row">
+    <div>
+      <div class="match-time">${match.time}</div>
+      <div class="match-time-sub">台灣時間</div>
+      <div class="match-num">${match.matchNum}</div>
+    </div>
+    <div class="team home">
+      <div class="team-flag">${hFlag}</div>
+      <div><div class="team-name">${match.home}</div><div class="team-name-en">${hEn}</div></div>
+    </div>
+    <div class="vs-block">
+      <div class="vs-text">VS</div>
+      <div class="group-badge group-${match.group}">${match.group}</div>
+    </div>
+    <div class="team away">
+      <div class="team-flag">${aFlag}</div>
+      <div><div class="team-name">${match.away}</div><div class="team-name-en">${aEn}</div></div>
+    </div>
+    <div class="match-venue"><div>${match.venue}</div></div>
+  </div>`;
 }
 
-function renderCalendar(filter) {
+function renderKoMatch(m, badgeClass) {
+  return `
+  <div class="match-row ko-row">
+    <div>
+      <div class="match-num" style="font-size:0.85rem;color:#a78bfa;background:none;padding:0;">${m.num}</div>
+      <div class="match-time-sub" style="margin-top:4px;">淘汰賽</div>
+    </div>
+    <div class="team home">
+      <div class="team-flag" style="font-size:1.3rem;">🏴</div>
+      <div>
+        <div class="team-tbd"><strong>${m.home.sub}</strong>${m.home.label}</div>
+      </div>
+    </div>
+    <div class="vs-block">
+      <div class="vs-text">VS</div>
+      <div class="${badgeClass}">${m.num}</div>
+    </div>
+    <div class="team away">
+      <div class="team-flag" style="font-size:1.3rem;">🏴</div>
+      <div>
+        <div class="team-tbd" style="text-align:right;"><strong>${m.away.sub}</strong>${m.away.label}</div>
+      </div>
+    </div>
+    <div class="match-venue"><div>${m.venue}</div></div>
+  </div>`;
+}
+
+function renderAll() {
   calendar.innerHTML = '';
   let cardIdx = 0;
-  sortedDays.forEach(([key, {mmdd, matches}]) => {
-    const filtered = filter === 'all' ? matches : matches.filter(m => m.group === filter);
-    if (filtered.length === 0) return;
 
-    const { m, d } = parseDate(mmdd);
-    const dateObj = new Date(2026, m-1, d);
-    const weekday = WEEKDAYS[dateObj.getDay()];
+  // Collect all day keys in order
+  const allDayKeys = new Set([
+    ...sortedGroupDays.map(([k])=>k),
+    ...sortedKoDays,
+  ]);
+  const sortedAllDays = [...allDayKeys].sort();
 
-    // Sort by time
-    const sorted = [...filtered].sort((a,b) => a.time < b.time ? -1 : 1);
+  // Phase dividers already shown
+  let lastPhase = null;
 
-    // Unique groups
-    const groups = [...new Set(sorted.map(m => m.group))];
+  sortedAllDays.forEach(key => {
+    const mmdd = key.slice(5).replace('-','');
+    const isGroupDay = !!groupDayMap[key];
+    const isKoDay = !!koDayMap[key];
+
+    // Apply stage filter
+    const koData = koDayMap[key];
+    if (currentStageFilter !== 'all') {
+      if (currentStageFilter === 'group' && !isGroupDay) return;
+      if (currentStageFilter !== 'group' && (!isKoDay || koData.stage !== currentStageFilter)) return;
+    }
+
+    // Apply group filter (only hides group-stage days, ko always shown)
+    let groupMatches = [];
+    if (isGroupDay && (currentStageFilter === 'all' || currentStageFilter === 'group')) {
+      groupMatches = currentGroupFilter === 'all'
+        ? groupDayMap[key].matches
+        : groupDayMap[key].matches.filter(m => m.group === currentGroupFilter);
+    }
+
+    const showKo = isKoDay && (currentStageFilter === 'all' || currentStageFilter === koData?.stage);
+    if (groupMatches.length === 0 && !showKo) return;
+
+    // Phase divider
+    let phase = isGroupDay && !showKo ? 'group' : (showKo ? koData.stage : 'group');
+    if (showKo) phase = koData.stage;
+    if (phase !== lastPhase) {
+      const div = document.createElement('div');
+      div.className = 'phase-divider';
+      const phaseMap = {
+        group:  { cls:'phase-group', label:'🏟 小組賽 Group Stage' },
+        r32:    { cls:'phase-r32',   label:'⚔️ 32強 Round of 32' },
+        r16:    { cls:'phase-r16',   label:'🎯 16強 Round of 16' },
+        qf:     { cls:'phase-qf',    label:'⚡ 8強 Quarter-Finals' },
+        sf:     { cls:'phase-sf',    label:'🔥 4強 Semi-Finals' },
+        '3rd':  { cls:'phase-3rd',   label:'🥉 季軍賽 Third Place' },
+        final:  { cls:'phase-final', label:'🏆 決賽 Final' },
+      };
+      const pm = phaseMap[phase] || { cls:'phase-group', label: phase };
+      div.innerHTML = `<div class="phase-divider-line"></div><div class="phase-title ${pm.cls}">${pm.label}</div><div class="phase-divider-line"></div>`;
+      calendar.appendChild(div);
+      lastPhase = phase;
+    }
+
+    // Card
+    const { m, d, dateObj } = parseMMDD(mmdd.replace('/','').padStart(4,'0').slice(-4).padStart(4,'0'));
+    const { m: mo2, d: d2, dateObj: dObj } = parseMMDD(
+      key.slice(5,7) + key.slice(8,10)
+    );
+    const wd = WEEKDAYS[dObj.getDay()];
+    const isKo = showKo;
+    const isFinal = showKo && koData.stage === 'final';
+    const is3rd = showKo && koData.stage === '3rd';
+
+    let cardClass = 'day-card';
+    if (isFinal) cardClass += ' final-card';
+    else if (is3rd) cardClass += ' third-card';
+    else if (isKo) cardClass += ' knockout';
+
+    const dateNumStr = key.slice(8,10);
+    const dateMonStr = key.slice(5,7);
+
+    // Pills
+    let pillsHtml = '';
+    if (groupMatches.length > 0) {
+      const groups = [...new Set(groupMatches.map(m=>m.group))];
+      pillsHtml = groups.map(g=>`<span class="group-pill group-${g}">${g}組</span>`).join('');
+    }
+    if (showKo) {
+      pillsHtml += `<span class="group-pill ${koData.badgeClass}" style="border-radius:999px;padding:3px 10px;">${koData.label}</span>`;
+    }
+
+    const totalCount = groupMatches.length + (showKo ? koData.matches.length : 0);
 
     const card = document.createElement('div');
-    card.className = 'day-card';
-    card.style.animationDelay = `${cardIdx * 0.06}s`;
+    card.className = cardClass;
+    card.style.animationDelay = `${cardIdx * 0.05}s`;
     cardIdx++;
 
-    const groupPills = groups.map(g =>
-      `<span class="group-pill group-${g}">${g}組</span>`
-    ).join('');
+    const groupMatchesHtml = groupMatches.length > 0
+      ? [...groupMatches].sort((a,b)=>a.time<b.time?-1:1).map(renderGroupMatch).join('')
+      : '';
+
+    const koMatchesHtml = showKo
+      ? koData.matches.map(m=>renderKoMatch(m, koData.badgeClass)).join('')
+      : '';
 
     card.innerHTML = `
       <div class="day-header">
         <div class="day-date-block">
-          <div class="day-num">${d}</div>
-          <div class="day-mon">${m}月</div>
+          <div class="day-num">${parseInt(dateNumStr)}</div>
+          <div class="day-mon">${parseInt(dateMonStr)}月</div>
         </div>
         <div class="day-info">
-          <div class="day-weekday">星期${weekday}　<span style="color:var(--text-secondary);font-weight:400;font-size:0.85rem;">2026.${String(m).padStart(2,'0')}.${String(d).padStart(2,'0')}</span></div>
-          <div class="day-match-count">${filtered.length} 場比賽</div>
+          <div class="day-weekday">星期${wd}　<span style="color:var(--text-secondary);font-weight:400;font-size:0.85rem;">2026.${dateMonStr}.${dateNumStr}</span></div>
+          <div class="day-match-count">${totalCount} 場比賽</div>
         </div>
-        <div class="day-groups">${groupPills}</div>
+        <div class="day-groups">${pillsHtml}</div>
       </div>
-      <div class="matches">
-        ${sorted.map(match => {
-          const hFlag = FLAGS[match.home] || '🏴';
-          const aFlag = FLAGS[match.away] || '🏴';
-          const hEn = EN_NAMES[match.home] || '';
-          const aEn = EN_NAMES[match.away] || '';
-          const { country, name } = venueShort(match.venue);
-          return `
-          <div class="match-row">
-            <div>
-              <div class="match-time">${match.time}</div>
-              <div class="match-time-sub">台灣時間</div>
-            </div>
-            <div class="team home">
-              <div class="team-flag">${hFlag}</div>
-              <div>
-                <div class="team-name">${match.home}</div>
-                <div class="team-name-en">${hEn}</div>
-              </div>
-            </div>
-            <div class="vs-block">
-              <div class="vs-text">VS</div>
-              <div class="group-badge group-${match.group}">${match.group}</div>
-            </div>
-            <div class="team away">
-              <div class="team-flag">${aFlag}</div>
-              <div>
-                <div class="team-name">${match.away}</div>
-                <div class="team-name-en">${aEn}</div>
-              </div>
-            </div>
-            <div class="match-venue">
-              <div>${name}</div>
-              <div class="venue-country">${country}</div>
-            </div>
-          </div>
-          `;
-        }).join('')}
-      </div>
+      <div class="matches">${groupMatchesHtml}${koMatchesHtml}</div>
     `;
     calendar.appendChild(card);
   });
 }
 
 function filterGroup(g) {
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.filter === g);
-  });
-  renderCalendar(g);
+  currentGroupFilter = g;
+  document.querySelectorAll('#groupFilterBar .filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.filter === g));
+  // When filtering by group, reset stage to group or all
+  if (g !== 'all' && currentStageFilter !== 'all' && currentStageFilter !== 'group') {
+    currentStageFilter = 'all';
+    document.querySelectorAll('#stageFilterBar .filter-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.stage === 'all'));
+  }
+  renderAll();
 }
 
-renderCalendar('all');
+function filterStage(s) {
+  currentStageFilter = s;
+  document.querySelectorAll('#stageFilterBar .filter-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.stage === s));
+  if (s !== 'all' && s !== 'group') {
+    currentGroupFilter = 'all';
+    document.querySelectorAll('#groupFilterBar .filter-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.filter === 'all'));
+  }
+  renderAll();
+}
+
+renderAll();
 </script>
 </body>
 </html>
