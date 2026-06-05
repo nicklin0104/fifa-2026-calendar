@@ -241,6 +241,26 @@
     .group-K { background: rgba(121,85,72,0.15); color: #a1887f; border: 1px solid rgba(121,85,72,0.3); }
     .group-L { background: rgba(0,188,212,0.15); color: #00bcd4; border: 1px solid rgba(0,188,212,0.3); }
 
+    /* ── Scores ── */
+    .match-score { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+    .score-num { font-size: 1.2rem; font-weight: 900; font-variant-numeric: tabular-nums; min-width: 18px; text-align: center; }
+    .score-dash { font-size: 0.9rem; color: var(--text-secondary); font-weight: 700; }
+    .score-win { color: var(--green); }
+    .score-lose { color: var(--text-secondary); opacity: 0.8; }
+    .score-draw { color: var(--gold); }
+
+    /* ── Standings Table ── */
+    .standings-wrapper { margin-bottom: 30px; animation: fadeUp 0.4s forwards; }
+    .standings-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); font-size: 0.85rem; }
+    .standings-table th, .standings-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid var(--border); }
+    .standings-table th { background: rgba(255,255,255,0.03); color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .standings-table tr:last-child td { border-bottom: none; }
+    .standings-table td.team-cell { text-align: left; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .standings-table td.pts-cell { font-weight: 800; color: var(--gold); font-size: 0.95rem; }
+    .standings-table tr.q-row td { background: rgba(0,200,111,0.05); }
+    .standings-table tr.q3-row td { background: rgba(245,200,66,0.05); }
+    .standings-header { padding: 6px 14px; font-weight: 800; font-size: 0.9rem; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.03); margin-bottom: 12px; display: inline-block; border-radius: 0 6px 6px 0; }
+
     /* ── Legend ── */
     .legend {
       background: var(--bg-card); border: 1px solid var(--border);
@@ -331,6 +351,7 @@
       <div class="filter-row" id="stageFilterBar">
         <button class="filter-btn stage-btn active" data-stage="all" onclick="filterStage('all')">全部賽程</button>
         <button class="filter-btn stage-btn" data-stage="group" onclick="filterStage('group')">🏟 小組賽</button>
+        <button class="filter-btn stage-btn" data-stage="standings" onclick="filterStage('standings')">📊 積分表</button>
         <button class="filter-btn stage-btn" data-stage="r32" onclick="filterStage('r32')">32強</button>
         <button class="filter-btn stage-btn" data-stage="r16" onclick="filterStage('r16')">16強</button>
         <button class="filter-btn stage-btn" data-stage="qf" onclick="filterStage('qf')">⚡ 8強</button>
@@ -361,6 +382,9 @@
     <div class="legend-title">分組說明</div>
     <div class="legend-grid" id="legendGrid"></div>
   </div>
+
+  <!-- Standings (Hidden by default) -->
+  <div id="standingsContainer" style="display:none;"></div>
 
   <!-- Calendar -->
   <div class="calendar" id="calendar"></div>
@@ -416,7 +440,8 @@ const GROUP_COLOR_MAP = {
 };
 
 // ─── Group Stage Data ────────────────────────────────────────────────────────
-// Format: [MMDD, time, home, away, venue, matchNum]
+// Format: [MMDD, time, home, away, venue, matchNum, score]
+// score 格式範例：'2-1'。若尚未比完可省略不填。
 const GROUP_MATCHES = [
   // A組 (M1-6)
   ['0612','03:00','墨西哥','南非','🇲🇽 阿茲特克體育場','M1'],
@@ -730,10 +755,10 @@ function venueLabel(v) { return v || ''; }
 
 // ─── Build group-stage day map ────────────────────────────────────────────────
 const groupDayMap = {};
-GROUP_MATCHES.forEach(([mmdd, time, home, away, venue, matchNum]) => {
+GROUP_MATCHES.forEach(([mmdd, time, home, away, venue, matchNum, score]) => {
   const key = dateKey(mmdd);
   if (!groupDayMap[key]) groupDayMap[key] = { mmdd, matches: [] };
-  groupDayMap[key].matches.push({ time, home, away, venue, group: TEAM_GROUP[home] || '?', matchNum });
+  groupDayMap[key].matches.push({ time, home, away, venue, group: TEAM_GROUP[home] || '?', matchNum, score });
 });
 const sortedGroupDays = Object.entries(groupDayMap).sort((a,b)=>a[0]<b[0]?-1:1);
 
@@ -763,11 +788,140 @@ const calendar = document.getElementById('calendar');
 let currentGroupFilter = 'all';
 let currentStageFilter = 'all';
 
+function calculateStandings() {
+  const standings = {};
+  Object.keys(GROUP_TEAMS).forEach(g => {
+    standings[g] = GROUP_TEAMS[g].map(team => ({
+      team, group: g, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
+    }));
+  });
+
+  GROUP_MATCHES.forEach(match => {
+    const score = match[6];
+    if (!score) return;
+    const [hS, aS] = score.split('-').map(Number);
+    const homeTeam = match[2];
+    const awayTeam = match[3];
+    const group = TEAM_GROUP[homeTeam];
+
+    const hStat = standings[group].find(t => t.team === homeTeam);
+    const aStat = standings[group].find(t => t.team === awayTeam);
+    
+    if(hStat && aStat) {
+      hStat.p++; aStat.p++;
+      hStat.gf += hS; hStat.ga += aS;
+      aStat.gf += aS; aStat.ga += hS;
+      if (hS > aS) { hStat.w++; hStat.pts += 3; aStat.l++; }
+      else if (hS < aS) { aStat.w++; aStat.pts += 3; hStat.l++; }
+      else { hStat.d++; aStat.d++; hStat.pts += 1; aStat.pts += 1; }
+    }
+  });
+
+  Object.keys(standings).forEach(g => {
+    standings[g].forEach(t => t.gd = t.gf - t.ga);
+    standings[g].sort((a, b) => {
+      if (b.pts !== a.pts) return b.pts - a.pts;
+      if (b.gd !== a.gd) return b.gd - a.gd;
+      if (b.gf !== a.gf) return b.gf - a.gf;
+      return 0;
+    });
+  });
+  return standings;
+}
+
+function renderStandings() {
+  const container = document.getElementById('standingsContainer');
+  container.innerHTML = '';
+  
+  if (currentStageFilter !== 'standings') {
+    container.style.display = 'none';
+    return;
+  }
+  container.style.display = 'block';
+
+  const standings = calculateStandings();
+  const groupsToShow = currentGroupFilter === 'all' ? Object.keys(standings) : [currentGroupFilter];
+
+  const grid = document.createElement('div');
+  grid.style.display = 'grid';
+  grid.style.gap = '24px';
+  grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(340px, 1fr))';
+  
+  groupsToShow.forEach(g => {
+    const tableHtml = `
+      <div class="standings-wrapper">
+        <div class="standings-header" style="border-left-color:${GROUP_COLOR_MAP[g]};">${g} 組積分表</div>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th style="width:24px;">#</th>
+              <th style="text-align:left;">球隊</th>
+              <th>賽</th>
+              <th>勝</th>
+              <th>平</th>
+              <th>負</th>
+              <th>得/失</th>
+              <th>淨</th>
+              <th>積分</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${standings[g].map((t, idx) => {
+              const rowCls = idx < 2 ? 'q-row' : (idx === 2 ? 'q3-row' : '');
+              return `
+                <tr class="${rowCls}">
+                  <td>${idx + 1}</td>
+                  <td class="team-cell"><span class="flag-emoji">${FLAGS[t.team]||'🏴'}</span>${t.team}</td>
+                  <td>${t.p}</td>
+                  <td>${t.w}</td>
+                  <td>${t.d}</td>
+                  <td>${t.l}</td>
+                  <td style="color:var(--text-secondary);">${t.gf}/${t.ga}</td>
+                  <td>${t.gd > 0 ? '+'+t.gd : t.gd}</td>
+                  <td class="pts-cell">${t.pts}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+    grid.innerHTML += tableHtml;
+  });
+  
+  container.appendChild(grid);
+  
+  if (typeof twemoji !== 'undefined') {
+    twemoji.parse(container, { folder: 'svg', ext: '.svg', base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/' });
+  }
+}
+
 function renderGroupMatch(match) {
   const hFlag = FLAGS[match.home] || '🏴';
   const aFlag = FLAGS[match.away] || '🏴';
   const hEn = EN_NAMES[match.home] || '';
   const aEn = EN_NAMES[match.away] || '';
+
+  let scoreHtml = '';
+  if (match.score) {
+    const [hS, aS] = match.score.split('-').map(Number);
+    const hCls = hS > aS ? 'score-win' : (hS < aS ? 'score-lose' : 'score-draw');
+    const aCls = aS > hS ? 'score-win' : (aS < hS ? 'score-lose' : 'score-draw');
+    scoreHtml = `
+      <div class="match-score">
+        <span class="score-num ${hCls}">${hS}</span>
+        <span class="score-dash">-</span>
+        <span class="score-num ${aCls}">${aS}</span>
+      </div>
+      <div class="match-num" style="margin-top:4px; font-size:0.65rem; background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--text-secondary);">${match.group}組</div>`;
+  } else {
+    scoreHtml = `
+      <div class="vs-block">
+        <div class="vs-text">VS</div>
+        <div class="group-badge group-${match.group}">${match.group}</div>
+      </div>`;
+  }
+
   return `
   <div class="match-row">
     <div>
@@ -778,9 +932,8 @@ function renderGroupMatch(match) {
       <div class="team-flag">${hFlag}</div>
       <div><div class="team-name">${match.home}</div><div class="team-name-en">${hEn}</div></div>
     </div>
-    <div class="vs-block">
-      <div class="vs-text">VS</div>
-      <div class="group-badge group-${match.group}">${match.group}</div>
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
+      ${scoreHtml}
     </div>
     <div class="team away">
       <div class="team-flag">${aFlag}</div>
@@ -794,6 +947,47 @@ function renderKoMatch(m, badgeClass) {
   const timeHtml = m.time
     ? `<div class="match-time" style="font-size:1rem;">${m.time}</div><div class="match-time-sub">台灣時間</div>`
     : `<div class="match-time-sub" style="margin-top:4px;">TBD</div>`;
+
+  let scoreHtml = '';
+  if (m.score) {
+    let [mainScore, penScore] = m.score.split(' ');
+    const [hS, aS] = mainScore.split('-').map(Number);
+    let hCls = hS > aS ? 'score-win' : (hS < aS ? 'score-lose' : 'score-draw');
+    let aCls = aS > hS ? 'score-win' : (aS < hS ? 'score-lose' : 'score-draw');
+    
+    let penHtml = '';
+    if (penScore) {
+      const [hp, ap] = penScore.replace('(','').replace(')','').split('-');
+      penHtml = `<div style="font-size:0.65rem; color:var(--gold); text-align:center; margin-top:2px;">PK ${hp}-${ap}</div>`;
+      if (hS === aS) {
+         hCls = parseInt(hp) > parseInt(ap) ? 'score-win' : 'score-lose';
+         aCls = parseInt(ap) > parseInt(hp) ? 'score-win' : 'score-lose';
+      }
+    }
+
+    let borderColor = 'rgba(255,255,255,0.1)';
+    if(badgeClass.includes('final')) borderColor = '#fca5a588';
+    else if(badgeClass.includes('sf')) borderColor = '#fbbf2488';
+    else if(badgeClass.includes('qf')) borderColor = '#34d39988';
+    else if(badgeClass.includes('r16')) borderColor = '#60a5fa88';
+    else borderColor = '#a78bfa88';
+
+    scoreHtml = `
+      <div class="match-score" style="border-color:${borderColor};">
+        <span class="score-num ${hCls}">${hS}</span>
+        <span class="score-dash">-</span>
+        <span class="score-num ${aCls}">${aS}</span>
+      </div>
+      ${penHtml}
+      <div class="match-num" style="margin-top:4px; font-size:0.65rem; background:transparent; border:1px solid rgba(255,255,255,0.1); color:var(--text-secondary);">${m.num}</div>`;
+  } else {
+    scoreHtml = `
+      <div class="vs-block">
+        <div class="vs-text">VS</div>
+        <div class="${badgeClass}">${m.num}</div>
+      </div>`;
+  }
+
   return `
   <div class="match-row ko-row">
     <div style="text-align:center;">
@@ -805,9 +999,8 @@ function renderKoMatch(m, badgeClass) {
         <div class="team-tbd"><strong>${m.home.sub}</strong>${m.home.label}</div>
       </div>
     </div>
-    <div class="vs-block">
-      <div class="vs-text">VS</div>
-      <div class="${badgeClass}">${m.num}</div>
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
+      ${scoreHtml}
     </div>
     <div class="team away">
       <div class="team-flag" style="font-size:1.3rem;">🏴</div>
@@ -822,6 +1015,14 @@ function renderKoMatch(m, badgeClass) {
 function renderAll() {
   calendar.innerHTML = '';
   let cardIdx = 0;
+
+  renderStandings();
+  
+  const legend = document.querySelector('.legend');
+  if (legend) legend.style.display = currentStageFilter === 'standings' ? 'none' : 'block';
+  calendar.style.display = currentStageFilter === 'standings' ? 'none' : 'flex';
+
+  if (currentStageFilter === 'standings') return;
 
   // Collect all day keys in order
   const allDayKeys = new Set([
@@ -962,7 +1163,7 @@ function filterStage(s) {
   currentStageFilter = s;
   document.querySelectorAll('#stageFilterBar .filter-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.stage === s));
-  if (s !== 'all' && s !== 'group') {
+  if (s !== 'all' && s !== 'group' && s !== 'standings') {
     currentGroupFilter = 'all';
     document.querySelectorAll('#groupFilterBar .filter-btn').forEach(b =>
       b.classList.toggle('active', b.dataset.filter === 'all'));
@@ -974,7 +1175,7 @@ function filterStage(s) {
 
 // ─── Mobile Filter Panel ──────────────────────────────────────────────────────
 const STAGE_LABELS = {
-  all:'全部賽程', group:'🏟 小組賽', r32:'32強', r16:'16強',
+  all:'全部賽程', group:'🏟 小組賽', standings:'📊 積分表', r32:'32強', r16:'16強',
   qf:'⚡ 8強', sf:'🔥 4強', '3rd':'🥉 季軍', final:'🏆 決賽'
 };
 
