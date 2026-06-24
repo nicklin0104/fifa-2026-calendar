@@ -556,7 +556,7 @@ const KNOCKOUT_DAYS = [
         away:{ label:'F組第二名', sub:'Runner-up Group F' },
         venue:'🇺🇸 休士頓 NRG體育場' },
       { num:'M74', time:'04:30',
-        home:{ label:'E組第一名', sub:'Winner Group E' },
+        home:{ label:'德國', sub:'Winner Group E', team:'德國' },
         away:{ label:'A/B/C/D/F最佳第三', sub:'Best 3rd of A/B/C/D/F' },
         venue:'🇺🇸 波士頓 吉列體育場' },
       { num:'M75', time:'09:00',
@@ -576,7 +576,7 @@ const KNOCKOUT_DAYS = [
         away:{ label:'C/D/F/G/H最佳第三', sub:'Best 3rd of C/D/F/G/H' },
         venue:'🇺🇸 紐澤西 大都會人壽體育場' },
       { num:'M79', time:'09:00',
-        home:{ label:'A組第一名', sub:'Winner Group A' },
+        home:{ label:'墨西哥', sub:'Winner Group A', team:'墨西哥' },
         away:{ label:'C/E/F/H/I最佳第三', sub:'Best 3rd of C/E/F/H/I' },
         venue:'🇲🇽 墨西哥城 阿茲特克體育場' },
     ]
@@ -592,7 +592,7 @@ const KNOCKOUT_DAYS = [
         away:{ label:'A/E/H/I/J最佳第三', sub:'Best 3rd of A/E/H/I/J' },
         venue:'🇺🇸 西雅圖 流明球場' },
       { num:'M81', time:'08:00',
-        home:{ label:'D組第一名', sub:'Winner Group D' },
+        home:{ label:'美國', sub:'Winner Group D', team:'美國' },
         away:{ label:'B/E/F/I/J最佳第三', sub:'Best 3rd of B/E/F/I/J' },
         venue:'🇺🇸 舊金山 李維斯體育場' },
     ]
@@ -620,7 +620,7 @@ const KNOCKOUT_DAYS = [
         away:{ label:'G組第二名', sub:'Runner-up Group G' },
         venue:'🇺🇸 達拉斯 AT&T體育場' },
       { num:'M86', time:'06:00',
-        home:{ label:'J組第一名', sub:'Winner Group J' },
+        home:{ label:'阿根廷', sub:'Winner Group J', team:'阿根廷' },
         away:{ label:'H組第二名', sub:'Runner-up Group H' },
         venue:'🇺🇸 邁阿密 硬石體育場' },
       { num:'M87', time:'09:30',
@@ -743,6 +743,54 @@ const KNOCKOUT_DAYS = [
     ]
   },
 ];
+
+// ─── Knockout Bracket Auto-Propagation ────────────────────────────────────────
+// 建立淘汰賽場次對照表，用於自動傳遞勝者/敗者到下一輪
+const koMatchMap = {};
+KNOCKOUT_DAYS.forEach(day => {
+  day.matches.forEach(m => { koMatchMap[m.num] = m; });
+});
+
+// 解析淘汰賽某場比賽的勝者（遞迴）
+function getKoWinner(matchNum) {
+  const m = koMatchMap[matchNum];
+  if (!m || !m.score) return null;
+  let [mainScore, penPart] = m.score.split(' ');
+  const [hS, aS] = mainScore.split('-').map(Number);
+  let homeWins;
+  if (hS !== aS) { homeWins = hS > aS; }
+  else if (penPart) {
+    const [hp, ap] = penPart.replace(/[()]/g, '').split('-').map(Number);
+    homeWins = hp > ap;
+  } else { return null; }
+  return resolveTeam(homeWins ? m.home : m.away);
+}
+
+// 解析淘汰賽某場比賽的敗者（遞迴）
+function getKoLoser(matchNum) {
+  const m = koMatchMap[matchNum];
+  if (!m || !m.score) return null;
+  let [mainScore, penPart] = m.score.split(' ');
+  const [hS, aS] = mainScore.split('-').map(Number);
+  let homeWins;
+  if (hS !== aS) { homeWins = hS > aS; }
+  else if (penPart) {
+    const [hp, ap] = penPart.replace(/[()]/g, '').split('-').map(Number);
+    homeWins = hp > ap;
+  } else { return null; }
+  return resolveTeam(homeWins ? m.away : m.home);
+}
+
+// 解析一個隊伍欄位 → 回傳隊伍中文名，或 null
+function resolveTeam(teamData) {
+  if (!teamData) return null;
+  if (teamData.team) return teamData.team;
+  const winMatch = teamData.label.match(/^(M\d+) 勝者$/);
+  if (winMatch) return getKoWinner(winMatch[1]);
+  const loseMatch = teamData.label.match(/^(M\d+) 敗者$/);
+  if (loseMatch) return getKoLoser(loseMatch[1]);
+  return null;
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const WEEKDAYS = ['日','一','二','三','四','五','六'];
@@ -994,25 +1042,35 @@ function renderKoMatch(m, badgeClass) {
       </div>`;
   }
 
+  // ── 自動解析隊伍 ──
+  const homeTeam = resolveTeam(m.home);
+  const awayTeam = resolveTeam(m.away);
+
+  const homeHtml = homeTeam
+    ? `<div class="team-flag">${FLAGS[homeTeam]||'🏴'}</div>
+       <div><div class="team-name">${homeTeam}</div><div class="team-name-en">${EN_NAMES[homeTeam]||''}</div></div>`
+    : `<div class="team-flag" style="font-size:1.3rem;">🏴</div>
+       <div><div class="team-tbd"><strong>${m.home.sub}</strong>${m.home.label}</div></div>`;
+
+  const awayHtml = awayTeam
+    ? `<div class="team-flag">${FLAGS[awayTeam]||'🏴'}</div>
+       <div><div class="team-name">${awayTeam}</div><div class="team-name-en">${EN_NAMES[awayTeam]||''}</div></div>`
+    : `<div class="team-flag" style="font-size:1.3rem;">🏴</div>
+       <div><div class="team-tbd" style="text-align:right;"><strong>${m.away.sub}</strong>${m.away.label}</div></div>`;
+
   return `
   <div class="match-row ko-row">
     <div style="text-align:center;">
       ${timeHtml}
     </div>
     <div class="team home">
-      <div class="team-flag" style="font-size:1.3rem;">🏴</div>
-      <div>
-        <div class="team-tbd"><strong>${m.home.sub}</strong>${m.home.label}</div>
-      </div>
+      ${homeHtml}
     </div>
     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
       ${scoreHtml}
     </div>
     <div class="team away">
-      <div class="team-flag" style="font-size:1.3rem;">🏴</div>
-      <div>
-        <div class="team-tbd" style="text-align:right;"><strong>${m.away.sub}</strong>${m.away.label}</div>
-      </div>
+      ${awayHtml}
     </div>
     <div class="match-venue"><div>${m.venue}</div></div>
   </div>`;
