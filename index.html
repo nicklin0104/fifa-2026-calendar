@@ -340,7 +340,7 @@
     <!-- Mobile toggle button (hidden on desktop) -->
     <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilterPanel()">
       <span class="toggle-label">
-        ⚽ 篩選賽程　<span class="active-tag" id="filterSummaryTag">全部賽程</span>
+        ⚽ 篩選賽程　<span class="active-tag" id="filterSummaryTag">32強</span>
       </span>
       <span class="toggle-arrow">▼</span>
     </button>
@@ -349,10 +349,10 @@
     <div class="filter-desktop" id="filterPanel">
       <div class="filter-label" style="margin-top:8px;">按階段篩選</div>
       <div class="filter-row" id="stageFilterBar">
-        <button class="filter-btn stage-btn active" data-stage="all" onclick="filterStage('all')">全部賽程</button>
+        <button class="filter-btn stage-btn" data-stage="all" onclick="filterStage('all')">全部賽程</button>
         <button class="filter-btn stage-btn" data-stage="group" onclick="filterStage('group')">🏟 小組賽</button>
         <button class="filter-btn stage-btn" data-stage="standings" onclick="filterStage('standings')">📊 積分表</button>
-        <button class="filter-btn stage-btn" data-stage="r32" onclick="filterStage('r32')">32強</button>
+        <button class="filter-btn stage-btn active" data-stage="r32" onclick="filterStage('r32')">32強</button>
         <button class="filter-btn stage-btn" data-stage="r16" onclick="filterStage('r16')">16強</button>
         <button class="filter-btn stage-btn" data-stage="qf" onclick="filterStage('qf')">⚡ 8強</button>
         <button class="filter-btn stage-btn" data-stage="sf" onclick="filterStage('sf')">🔥 4強</button>
@@ -839,7 +839,7 @@ Object.entries(GROUP_TEAMS).forEach(([g, teams]) => {
 const calendar = document.getElementById('calendar');
 
 let currentGroupFilter = 'all';
-let currentStageFilter = 'all';
+let currentStageFilter = 'r32';
 
 function calculateStandings() {
   const standings = {};
