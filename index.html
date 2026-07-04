@@ -352,8 +352,8 @@
         <button class="filter-btn stage-btn" data-stage="all" onclick="filterStage('all')">全部賽程</button>
         <button class="filter-btn stage-btn" data-stage="group" onclick="filterStage('group')">🏟 小組賽</button>
         <button class="filter-btn stage-btn" data-stage="standings" onclick="filterStage('standings')">📊 積分表</button>
-        <button class="filter-btn stage-btn active" data-stage="r32" onclick="filterStage('r32')">32強</button>
-        <button class="filter-btn stage-btn" data-stage="r16" onclick="filterStage('r16')">16強</button>
+        <button class="filter-btn stage-btn" data-stage="r32" onclick="filterStage('r32')">32強</button>
+        <button class="filter-btn stage-btn active" data-stage="r16" onclick="filterStage('r16')">16強</button>
         <button class="filter-btn stage-btn" data-stage="qf" onclick="filterStage('qf')">⚡ 8強</button>
         <button class="filter-btn stage-btn" data-stage="sf" onclick="filterStage('sf')">🔥 4強</button>
         <button class="filter-btn stage-btn" data-stage="final" onclick="filterStage('final')">🏆 決賽</button>
@@ -839,7 +839,7 @@ Object.entries(GROUP_TEAMS).forEach(([g, teams]) => {
 const calendar = document.getElementById('calendar');
 
 let currentGroupFilter = 'all';
-let currentStageFilter = 'r32';
+let currentStageFilter = 'r16';
 
 function calculateStandings() {
   const standings = {};
