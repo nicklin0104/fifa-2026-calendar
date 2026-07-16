@@ -340,7 +340,7 @@
     <!-- Mobile toggle button (hidden on desktop) -->
     <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilterPanel()">
       <span class="toggle-label">
-        ⚽ 篩選賽程　<span class="active-tag" id="filterSummaryTag">4強</span>
+        ⚽ 篩選賽程　<span class="active-tag" id="filterSummaryTag">🏆 決賽</span>
       </span>
       <span class="toggle-arrow">▼</span>
     </button>
@@ -355,8 +355,8 @@
         <button class="filter-btn stage-btn" data-stage="r32" onclick="filterStage('r32')">32強</button>
         <button class="filter-btn stage-btn" data-stage="r16" onclick="filterStage('r16')">16強</button>
         <button class="filter-btn stage-btn" data-stage="qf" onclick="filterStage('qf')">⚡ 8強</button>
-        <button class="filter-btn stage-btn active" data-stage="sf" onclick="filterStage('sf')">🔥 4強</button>
-        <button class="filter-btn stage-btn" data-stage="final" onclick="filterStage('final')">🏆 決賽</button>
+        <button class="filter-btn stage-btn" data-stage="sf" onclick="filterStage('sf')">🔥 4強</button>
+        <button class="filter-btn stage-btn active" data-stage="final" onclick="filterStage('final')">🏆 決賽</button>
       </div>
       <div class="filter-label" style="margin-top:8px;">按小組篩選（小組賽）</div>
       <div class="filter-row" id="groupFilterBar">
@@ -839,7 +839,7 @@ Object.entries(GROUP_TEAMS).forEach(([g, teams]) => {
 const calendar = document.getElementById('calendar');
 
 let currentGroupFilter = 'all';
-let currentStageFilter = 'sf';
+let currentStageFilter = 'final';
 
 function calculateStandings() {
   const standings = {};
@@ -1270,6 +1270,158 @@ function closeFilterPanel() {
 
 updateFilterSummary();
 renderAll();
+
+// ─── Champion Celebration Effect ──────────────────────────────────────────────
+// 當 M104（決賽）有比分時，自動觸發冠軍慶祝特效
+(function initChampionCelebration() {
+  const finalMatch = koMatchMap['M104'];
+  if (!finalMatch || !finalMatch.score) return;
+  const champion = getKoWinner('M104');
+  if (!champion) return;
+  const flag = FLAGS[champion] || '🏴';
+  const enName = EN_NAMES[champion] || '';
+
+  // ── 1. Confetti Canvas ──
+  const canvas = document.createElement('canvas');
+  canvas.id = 'confettiCanvas';
+  Object.assign(canvas.style, {
+    position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
+    pointerEvents: 'none', zIndex: '9999'
+  });
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  const COLORS = ['#f5c842','#00c86f','#ff6b6b','#7c3aed','#60a5fa','#fff','#fbbf24','#34d399','#f472b6'];
+  const particles = [];
+  for (let i = 0; i < 200; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H - H,
+      w: Math.random() * 10 + 5,
+      h: Math.random() * 6 + 3,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 3 + 1.5,
+      rot: Math.random() * 360,
+      rotV: (Math.random() - 0.5) * 8,
+      opacity: 1
+    });
+  }
+
+  let confettiFrame = 0;
+  const MAX_FRAMES = 400; // ~6.7 seconds at 60fps
+  function animateConfetti() {
+    confettiFrame++;
+    ctx.clearRect(0, 0, W, H);
+    const fadeStart = MAX_FRAMES * 0.7;
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.rotV;
+      p.vy += 0.02; // gravity
+      if (confettiFrame > fadeStart) {
+        p.opacity = Math.max(0, 1 - (confettiFrame - fadeStart) / (MAX_FRAMES - fadeStart));
+      }
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (confettiFrame < MAX_FRAMES) {
+      requestAnimationFrame(animateConfetti);
+    } else {
+      canvas.remove();
+    }
+  }
+  requestAnimationFrame(animateConfetti);
+
+  // ── 2. Champion Banner ──
+  const banner = document.createElement('div');
+  banner.id = 'championBanner';
+  banner.innerHTML = `
+    <div class="champ-trophy">🏆</div>
+    <div class="champ-title">2026 FIFA WORLD CUP CHAMPION</div>
+    <div class="champ-flag">${flag}</div>
+    <div class="champ-name">${champion}</div>
+    <div class="champ-en">${enName}</div>
+  `;
+  document.querySelector('.hero').insertAdjacentElement('afterend', banner);
+  if (typeof twemoji !== 'undefined') twemoji.parse(banner, { folder: 'svg', ext: '.svg', base: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/' });
+
+  // ── 3. Banner Styles ──
+  const style = document.createElement('style');
+  style.textContent = `
+    #championBanner {
+      text-align: center;
+      padding: 40px 24px 48px;
+      position: relative;
+      z-index: 1;
+      animation: bannerFadeIn 1s ease-out;
+    }
+    @keyframes bannerFadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .champ-trophy {
+      font-size: 4rem;
+      margin-bottom: 12px;
+      animation: trophyBounce 2s ease-in-out infinite;
+    }
+    @keyframes trophyBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-12px) rotate(-5deg); }
+      75% { transform: translateY(-8px) rotate(5deg); }
+    }
+    .champ-title {
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .champ-flag {
+      font-size: 5rem;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 20px rgba(245,200,66,0.4));
+    }
+    .champ-flag img.emoji { width: 80px !important; height: 80px !important; }
+    .champ-name {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, #fbbf24 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 4px;
+    }
+    .champ-en {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+    #championBanner::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    #championBanner::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+  `;
+  document.head.appendChild(style);
+})();
 </script>
 
 <script>
